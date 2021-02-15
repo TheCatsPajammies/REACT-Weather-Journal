@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import Forecast from "./components/Forecast.js";
+import Forecast from "./components/Forecast/Forecast.js";
 
 function App(props) {
  return (

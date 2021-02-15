@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Conditions from "./Conditions.js";
+import Conditions from "../Conditions/Conditions.js";
 import classes from './Forecast.module.css';
 
 
@@ -27,6 +27,7 @@ const Forecast = () => {
     .then(response => response.json())
     .then(response => {
         setResponseObj(response)
+        console.log(JSON.stringify(responseObj))
     })
     .catch(err => {
         console.error(err);
@@ -37,9 +38,9 @@ const Forecast = () => {
     // JSX code will go here    
     <div>
         <h2>Find Current Weather Conditions</h2>
-        <div>
+        {/*<div>
             {JSON.stringify(responseObj)}
-        </div>
+        </div>*/}
         <form onSubmit={getForecast}>
             <input
                 type="text"
@@ -47,7 +48,7 @@ const Forecast = () => {
                 maxLength="50"
                 value={city}
                 onChange={(e) => setCity(e.target.value)}
-                className={classes.textInput}
+                className={classes.TextInput}
                 />
             <label>
                 <input
@@ -63,7 +64,7 @@ const Forecast = () => {
             <label>
                 <input
                     className={classes.Radio}
-                    ype="radio"
+                    type="radio"
                     name="units"
                     checked={unit === "metric"}
                     value="metric"
