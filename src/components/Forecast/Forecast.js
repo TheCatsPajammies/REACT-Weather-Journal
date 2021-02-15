@@ -8,6 +8,8 @@ const Forecast = () => {
     let [city, setCity] = useState('');
     let [unit, setUnit] = useState('imperial');
     let [responseObj, setResponseObj] = useState({});
+    let [error, setError] = useState(false);
+    let [loading, setLoading] = useState(false);
 
     const uriEncodedCity = encodeURIComponent(city);
 
@@ -15,12 +17,15 @@ const Forecast = () => {
 
     function getForecast(e) {
         e.preventDefault();
+        if (city.length === 0) {
+            return setError(true);
+        }
 
     // weather data fetch function will go here
     fetch(`https://community-open-weather-map.p.rapidapi.com/weather?units=${unit}&q=${uriEncodedCity}`, {
 	    "method": "GET",
 	    "headers": {
-		"x-rapidapi-key": "586cde8f2bmsh773806964ddeecbp183380jsn5c8b0fe47099",
+		"x-rapidapi-key": process.env.REACT_APP_API_KEY,
 		"x-rapidapi-host": "community-open-weather-map.p.rapidapi.com"
 	    }
     })
@@ -28,9 +33,15 @@ const Forecast = () => {
     .then(response => {
         setResponseObj(response)
         console.log(JSON.stringify(responseObj))
+        if (response.cod !== 200) {
+            throw new Error()
+        }
     })
     .catch(err => {
         console.error(err);
+            setError(true);
+            setLoading(false);
+            console.log(err.message);
     });
 
    }
@@ -38,7 +49,7 @@ const Forecast = () => {
     // JSX code will go here    
     <div>
         <h2>Find Current Weather Conditions</h2>
-        {/*<div>
+        {/*<div> // This is the original display of the actual object that's received when making the API call
             {JSON.stringify(responseObj)}
         </div>*/}
         <form onSubmit={getForecast}>
@@ -76,6 +87,8 @@ const Forecast = () => {
         </form>
         <Conditions
             responseObj={responseObj}
+            error={error} //new
+            loading={loading} //new
             />
     </div>
    )
